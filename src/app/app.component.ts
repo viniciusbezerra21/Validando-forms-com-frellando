@@ -14,15 +14,16 @@ const COMPONENTS = [
 ];
 
 const MODULES = [
-  ReactiveFormsModule
+  ReactiveFormsModule,
+  RouterOutlet
 ];
 
 @Component({
   selector: 'app-root',
   imports: [
     ...COMPONENTS,
-    ...MODULES
-  ],
+    ...MODULES,
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
