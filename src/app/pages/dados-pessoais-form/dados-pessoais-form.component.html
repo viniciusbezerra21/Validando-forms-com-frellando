@@ -10,22 +10,80 @@
 
       <form [formGroup]="dadosPessoaisForm" (ngSubmit)="onProximo()">
 
+        <div class="cadastro-form__field">
+          <label for="nomeCompleto" class="cadastro-form__label">Nome completo</label>
+          <input type="text" id="nomeCompleto" class="cadastro-form__input" formControlName="nomeCompleto">
+          <div *ngIf="dadosPessoaisForm.get('nomeCompleto')?.touched && dadosPessoaisForm.get('nomeCompleto')?.invalid"
+            class="cadastro-form__error">Nome completo é obrigatório</div>
+        </div>
+
+        <div class="cadastro-form__row">
+          <div class="cadastro-form__field cadastro-form__field--half">
+            <label for="estado" class="cadastro-form__label">Estado</label>
+            <select id="estado" class="cadastro-form__input" formControlName="estado">
+              <option value="" disabled selected>Selecione</option>
+              <option *ngFor="let estado of estados" [value]="estado.sigla">{{ estado.nome }}</option>
+            </select>
+            <div *ngIf="dadosPessoaisForm.get('estado')?.touched && dadosPessoaisForm.get('estado')?.invalid"
+              class="cadastro-form__error">Estado é obrigatório</div>
+          </div>
+
+          <div class="cadastro-form__field cadastro-form__field--half">
+            <label for="cidade" class="cadastro-form__label">Cidade</label>
+            <input type="text" id="cidade" class="cadastro-form__input" formControlName="cidade">
+            
+            <div *ngIf="dadosPessoaisForm.get('cidade')?.touched && dadosPessoaisForm.get('cidade')?.invalid"
+              class="cadastro-form__error">Cidade é obrigatória</div>  
+          </div>
+        </div>
+
+        <div class="cadastro-form__field">
+          <div class="cadastro-form__field cadastro-form__field--half">
+            <label for="email" class="cadastro-form__label">Email</label>
+            <input type="email" id="email" class="cadastro-form__input" formControlName="email">
+  
+            <div *ngIf="dadosPessoaisForm.get('email')?.touched && dadosPessoaisForm.get('email')?.invalid"
+              class="cadastro-form__error">
+              <span *ngIf="dadosPessoaisForm.get('email')?.errors?.['required']">Email é obrigatório</span>
+              <span *ngIf="dadosPessoaisForm.get('email')?.errors?.['email']">Email invalido</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cadastro-form__row"> 
+          <div class="cadastro-form__field cadastro-form__field--half">
+            <label for="senha" class="cadastro-form__label">Senha</label>
+            <input type="password" id="senha" class="cadastro-form__input" formControlName="senha">
+
+            <div *ngIf="dadosPessoaisForm.get('senha')?.touched && dadosPessoaisForm.get('senha')?.invalid"
+              class="cadastro-form__error">
+              <span *ngIf="dadosPessoaisForm.get('senha')?.errors?.['required']">Senha é obrigatória</span>
+              <span *ngIf="dadosPessoaisForm.get('senha')?.errors?.['minLength']">Senha deve ter pelo menos 6 caracteres</span>
+            </div>
+          </div>
+
+          <div class="cadastro-form__field cadastro-form__field--half">
+            <label for="confirmaSenha" class="cadastro-form__label">Repita a senha</label>
+            <input type="password" id="confirmaSenha" class="cadastro-form__input" formControlName="confirmaSenha">
+          
+            <div *ngIf="dadosPessoaisForm.get('confirmaSenha')?.touched && dadosPessoaisForm.get('confirmaSenha')?.invalid"
+              class="cadastro-form__error">
+              <span *ngIf="dadosPessoaisForm.get('confirmaSenha')?.errors?.['required']">Confirmação de senha é obrigatória</span>
+            </div>
+            <div *ngIf="dadosPessoaisForm.errors?.['senhasNaoIguais'] && dadosPessoaisForm.get('confirmaSenha')?.touched" class="cadastro-form__error">
+              <span>As senhas não coincidem</span>
+            </div>
+          </div>
+        </div>
+
+
         <div class="cadastro-form__actions">
-          <app-button
-            text="Anterior"
-            type="outline"
-            icon="fas fa-arrow-left"
-            iconPosition="left"
+          <app-button text="Anterior" type="outline" icon="fas fa-arrow-left" iconPosition="left"
             (clicked)="onAnterior()">
           </app-button>
 
-          <app-button
-            text="Próximo"
-            type="primary"
-            icon="fas fa-arrow-right"
-            iconPosition="right"
-            [disabled]="dadosPessoaisForm.invalid"
-            (clicked)="onProximo()">
+          <app-button text="Próximo" type="primary" icon="fas fa-arrow-right" iconPosition="right"
+            [disabled]="dadosPessoaisForm.invalid" (clicked)="onProximo()">
           </app-button>
         </div>
       </form>

@@ -1,9 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, AbstractControlOptions, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { Router } from '@angular/router';
-import { CadastroService } from '../../shared/cadastro.service';
+import { CadastroService } from '../../shared/services/cadastro.service';
+
+
+export const senhasIguaisValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const senha = control.get('senha');
+  const confirmaSenha = control.get('confirmaSenha');
+
+
+
+
+  return senha && confirmaSenha && senha.value === confirmaSenha.value ?
+  null : { senhasNaoIguais: true };
+}
 
 @Component({
   selector: 'app-dados-pessoais-form',
@@ -52,6 +64,10 @@ export class DadosPessoaisFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const formOptions: AbstractControlOptions = {
+      validators: senhasIguaisValidator
+    };
+
     this.dadosPessoaisForm = this.fb.group({
       nomeCompleto: ['', Validators.required],
       estado: ['', Validators.required],
@@ -59,7 +75,7 @@ export class DadosPessoaisFormComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       senha: ['', [Validators.required, Validators.minLength(6)]],
       confirmaSenha: ['', Validators.required],
-    });
+    }, formOptions);
   }
 
   onAnterior(): void {
@@ -70,7 +86,7 @@ export class DadosPessoaisFormComponent implements OnInit {
   onProximo(): void {
     if (this.dadosPessoaisForm.valid) {
       this.salvarDadosAtuais();
-      this.router.navigate(['/cadastro/perfil']);
+      this.router.navigate(['/cadastro/confirmacao']);
     } else {
       this.dadosPessoaisForm.markAllAsTouched();
     }
@@ -78,6 +94,8 @@ export class DadosPessoaisFormComponent implements OnInit {
 
   private salvarDadosAtuais(): void {
     const formValue = this.dadosPessoaisForm.value;
+
+    
     this.cadastroService.updateCadastroData({
       nomeCompleto: formValue.nomeCompleto,
       estado: formValue.estado,
