@@ -22,7 +22,9 @@
             <label for="estado" class="cadastro-form__label">Estado</label>
             <select id="estado" class="cadastro-form__input" formControlName="estado">
               <option value="" disabled selected>Selecione</option>
-              <option *ngFor="let estado of estados" [value]="estado.sigla">{{ estado.nome }}</option>
+              <ng-container *ngIf="estado$ | async as estados">
+                <option *ngFor="let estado of estados" [value]="estado.sigla">{{ estado.nome }}</option>
+              </ng-container>
             </select>
             <div *ngIf="dadosPessoaisForm.get('estado')?.touched && dadosPessoaisForm.get('estado')?.invalid"
               class="cadastro-form__error">Estado é obrigatório</div>
@@ -30,7 +32,16 @@
 
           <div class="cadastro-form__field cadastro-form__field--half">
             <label for="cidade" class="cadastro-form__label">Cidade</label>
-            <input type="text" id="cidade" class="cadastro-form__input" formControlName="cidade">
+            <select 
+            id="cidade"
+            class="cadastro-form__input"
+            formControlName="cidade"
+            [disabled]="(carregandoCidade$ | async) || !dadosPessoaisForm.get('estado')?.value">
+            <option value="" disabled selected>{{ (carregandoCidade$ | async) ? 'Carregando...' : 'Selecione' }}</option>
+            <ng-container *ngIf="cidade$ | async as cidades">
+              <option *ngFor="let cidade of cidades" [value]="cidade.nome">{{ cidade.nome }}</option>
+            </ng-container>
+          </select>
             
             <div *ngIf="dadosPessoaisForm.get('cidade')?.touched && dadosPessoaisForm.get('cidade')?.invalid"
               class="cadastro-form__error">Cidade é obrigatória</div>  
