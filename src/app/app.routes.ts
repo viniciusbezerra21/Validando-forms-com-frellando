@@ -8,4 +8,5 @@ export const routes: Routes = [
   { path: 'cadastro/area-atuacao', component: CadastroFormComponent },
   { path: 'cadastro/dados-pessoais', component: DadosPessoaisFormComponent },
   { path: 'cadastro/perfil', component: PerfilFormComponent },
+  { path: 'cadastro/confirmacao', component: PerfilFormComponent },
 ];

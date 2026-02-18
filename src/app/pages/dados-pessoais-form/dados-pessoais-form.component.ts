@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { CadastroService } from '../../shared/services/cadastro.service';
 import { BehaviorSubject, Observable, of, startWith, switchMap, tap } from 'rxjs';
 import { Cidade, Estado, IbgeService } from '../../shared/services/ibge.service';
+import { cpfValidator } from '../../shared/validators/cpf.validator';
 
 
 export const senhasIguaisValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
@@ -49,6 +50,7 @@ export class DadosPessoaisFormComponent implements OnInit {
 
     this.dadosPessoaisForm = this.fb.group({
       nomeCompleto: ['', Validators.required],
+      cpf: ['', [Validators.required, cpfValidator]],
       estado: ['', Validators.required],
       cidade: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -68,7 +70,8 @@ export class DadosPessoaisFormComponent implements OnInit {
   onProximo(): void {
     if (this.dadosPessoaisForm.valid) {
       this.salvarDadosAtuais();
-      this.router.navigate(['/cadastro/confirmacao']);
+      this.dadosPessoaisForm.markAllAsTouched();
+      this.router.navigate(['cadastro/perfil']);
     } else {
       this.dadosPessoaisForm.markAllAsTouched();
     }
