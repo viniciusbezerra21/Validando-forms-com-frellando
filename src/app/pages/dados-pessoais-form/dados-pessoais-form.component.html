@@ -66,12 +66,23 @@
         <div class="cadastro-form__field">
           <div class="cadastro-form__field">
             <label for="email" class="cadastro-form__label">Email</label>
-            <input type="email" id="email" class="cadastro-form__input" formControlName="email">
-  
-            <div *ngIf="dadosPessoaisForm.get('email')?.touched && dadosPessoaisForm.get('email')?.invalid"
-              class="cadastro-form__error">
+            <div class="input-copntainer">
+              <input type="email" id="email" class="cadastro-form__input" formControlName="email" [ngClass]="{
+                'cadastro-form__input--error': dadosPessoaisForm.get('email')?.invalid && dadosPessoaisForm.get('email')?.touched,
+                'cadastro-form__input--pending': dadosPessoaisForm.get('email')?.pending
+              }">
+            </div>
+
+            <div class="cadastro-form__error-container"></div>
+            <div *ngIf="dadosPessoaisForm.get('email')?.touched && dadosPessoaisForm.get('email')?.invalid && !dadosPessoaisForm.get('email')?.pending"
+              class="cadastro-form__error" >
               <span *ngIf="dadosPessoaisForm.get('email')?.errors?.['required']">Email é obrigatório</span>
               <span *ngIf="dadosPessoaisForm.get('email')?.errors?.['email']">Email invalido</span>
+              <span *ngIf="dadosPessoaisForm.get('email')?.errors?.['emailExistente']">Email ja cadastrado</span>
+            </div>
+
+            <div *ngIf="dadosPessoaisForm.get('email')?.pending" class="cadastro-form__pending">
+              <span>Verificando disponibilidade...</span>
             </div>
           </div>
         </div>
